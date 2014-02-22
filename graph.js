@@ -1,40 +1,7 @@
 'use strict';
-
-function Set(elements) {
-    var elems = {};
-    elements.map(function(e) {
-	if ( e in elems ) {
-	    // nothing to do -- it's just a dupe
-	} else {
-	    elems[e] = 1;
-	}
-    });
-    this._elements = elems;
-}
-
-Set.prototype.has = function(e) {
-    return e in this._elements;
-};
-
-Set.prototype.add = function(e) {
-    this._elements[e] = 1;
-};
-
-Set.prototype.del = function(e) {
-    delete this._elements[e];
-};
-
-Set.prototype.elems = function() {
-    return Object.keys(this._elements);
-};
-
-Set.prototype.minus = function(other) {
-    function predicate(e) {
-	return !other.has(e);
-    }
-    var elems = this.elems().filter(predicate);
-    return new Set(elems);
-};
+var Set = require('./set.js');
+var Queue = require('./queue.js');
+var Stack = require('./stack.js');
 
 
 function pairs(obj) {
@@ -57,7 +24,6 @@ function Graph(vertices, edges) {
 }
 
 Graph.prototype.addNode = function(name) {
-    console.log('trying to add vertex ' + name);
     if ( !this._vertices.has(name) ) {
 	this._vertices.add(name);
 	this._edges[name] = new Set([]);
@@ -128,36 +94,61 @@ Graph.prototype.shortestPath = function(from, to) {
     return costs[to];
 };
 
+function defaultSort(x, y) {
+    if ( x === y) {
+        return 0;
+    } else if ( x < y ) {
+        return -1;
+    } 
+    return 1;
+}
 
-var states = new Graph(new Set([
-        "CT", "NY", "IA", "NE", "FL", "VA", "MA", "CO"
-    ]),
-    [
-	["NE", "IA"],
-	["CT", "NY"]
-    ]);
-
-var eg = new Graph(new Set(['a', 'b', 'c', 'd', 'e', 'f']),
-		   [['a', 'b'], ['a', 'c'], ['b', 'c'], ['c', 'd'],
-		    ['b', 'e'], ['e', 'f'], ['a', 'f']]);
-
-var trp = new Graph(new Set(['H', 'N', 'C', 'O', 'CA', 'HA', 'CB', 'HB2', 'HB3',
-			     'CG', 'CD1', 'HD1', 'NE1', 'HE1', 'CE2', 'CZ2', 'HZ2',
-			     'CH2', 'HH2', 'CZ3', 'HZ3', 'CE3', 'HE3', 'CD2']),
-		    [['H', 'N'], ['N', 'CA'], ['CA', 'HA'], ['CA', 'C'], ['C', 'O'],
-		     ['CA', 'CB'], ['CB', 'HB2'], ['CB', 'HB3'], ['CB', 'CG'],
-		     ['CG', 'CD1'], ['CD1', 'HD1'], ['CD1', 'NE1'], ['NE1', 'HE1'],
-		     ['NE1', 'CE2'], ['CE2', 'CZ2'], ['CZ2', 'HZ2'], ['CZ2', 'CH2'],
-		     ['CH2', 'HH2'], ['CH2', 'CZ3'], ['CZ3', 'HZ3'], ['CZ3', 'CE3'],
-		     ['CE3', 'HE3'], ['CE3', 'CD2'], ['CD2', 'CE2'], ['CD2', 'CG']]);
-
-var nope = new Graph(new Set(['a', 'b', 'c']),
-		     [['a', 'b']]);
-
-module.exports = {
-    'Graph': Graph,
-    'states': states,
-    'eg': eg,
-    'trp': trp,
-    'nope': nope
+Graph.prototype.depthFirst = function(start, f) {
+    if ( !f ) {f = defaultSort;}
+    var stack = new Stack([start]),
+        visited = new Set([]),
+        order = [],
+        current;
+    while ( stack.length() > 0 ) {
+        current = stack.pop();
+        // what if 'current' has already been visited?
+        if ( visited.has(current) ) {
+            continue;
+        }
+        console.log(JSON.stringify([current, stack, order, visited]));
+        order.push(current);
+        visited.add(current);
+        // reverses so that the sort function makes sense, and the elements at the
+        // front of the sorted array get to the top of the stack
+        this.neighbors(current).elems().sort(f).reverse().map(function(n) {
+            stack.push(n);
+        });
+    }
+    return order;
 };
+
+Graph.prototype.breadthFirst = function(start, f) {
+    if ( !f ) {f = defaultSort;}
+    var queue = new Queue([start]),
+        visited = new Set([]),
+        order = [],
+        current;
+    while ( queue.length() > 0 ) {
+        current = queue.remove();
+        // what if 'current' has already been visited?
+        if ( visited.has(current) ) {
+            continue;
+        }
+        console.log(JSON.stringify([current, queue, order, visited]));
+        order.push(current);
+        visited.add(current);
+        this.neighbors(current).elems().sort(f).map(function(n) {
+            queue.add(n);
+        });
+    }
+    return order;
+};
+
+
+module.exports = Graph;
+
