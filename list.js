@@ -1,6 +1,6 @@
 'use strict';
 
-
+// I think that `_back` is only used so that pushing is O(1) instead of O(n)
 function List(elems) {
     this._back = {'next': undefined};
     this._front = this._back;
@@ -21,6 +21,39 @@ List.prototype.elems = function() {
     return out;
 };
 
+// remove element, anywhere in list, by equality test
+List.prototype.remove = function(x) {
+    var prev = this._front,
+        current = prev.next;
+    if ( this._front.next && this._front.value === x ) {
+        this._front = this._front.next;
+        this._length--;
+    } else {
+        while ( current !== undefined ) { // b/c undefined -> gone off back
+            if ( current.value === x ) {
+                prev.next = current.next;
+                this._length--;
+                break;
+            }
+            prev = prev.next;
+            current = current.next;
+        }
+    }
+    console.log('length: ' + this.length());
+};
+
+List.prototype.remove2 = function(x) {
+    if ( this.length() === 0 ) {
+
+    } else if ( this._front.value === x ) {
+        this._front = this._front.next;
+    } else {
+        var curr = this._front;
+        while ( curr.next ) {
+            if ( curr. // TODO
+    }
+};
+
 List.prototype.length = function() {
     return this._length;
 };
@@ -30,8 +63,10 @@ List.prototype.shift = function() {
     if ( this.length() === 0 ) {
         throw new Error("can't shift empty List");
     }
+    var value = this._front.value;
     this._front = this._front.next;
     this._length--;
+    return value;
 };
 
 // add to front
@@ -48,6 +83,10 @@ List.prototype.push = function(elem) {
     oldBack.next = newE;
     this._back = newE;
     this._length++;
+};
+
+List.prototype.toString = function() {
+    return JSON.stringify({'type': 'List', 'elems': this.elems()});
 };
 
 
