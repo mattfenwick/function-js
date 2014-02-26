@@ -18,7 +18,7 @@ function reverse(xs) {
     var arr = [],
         i = 0;
     for ( ; i < xs.length; i++) {
-	arr.unshift(xs[i]);
+        arr.unshift(xs[i]);
     }
     return arr;
 }
@@ -29,7 +29,7 @@ function concat(xs, ys) {
     var arr = xs.slice(), // makes a copy
         i = 0;
     for ( ; i < ys.length; i++) {
-	arr.push(ys[i]);
+        arr.push(ys[i]);
     }
     return arr;
 }
@@ -45,11 +45,11 @@ function type(obj) {
     //  arguments, null, undefined
     // but wait: there's overlap.  so what's the canonical type?
     if ( Object.prototype.toString.call(obj) === '[object Array]' ) {
-	return 'array';
+        return 'array';
     }
     return (typeof t);
 }
-	
+    
 
 // operators
 function plus(x, y) {
@@ -115,7 +115,7 @@ function partial(f) {
     var args = getArgs(arguments).slice(1);// ignore the function
     return function() {
         var innerArgs = getArgs(arguments),
-	    fullArgs = concat(args, innerArgs);
+            fullArgs = concat(args, innerArgs);
         return apply_(f, fullArgs);
     };
 }
@@ -155,7 +155,7 @@ function filter(p, xs) {
     for ( ; i < xs.length; i++) {
         if ( p(xs[i]) ) {
             arr.push(xs[i]);
-	}
+        }
     }
     return arr;
 }
@@ -170,7 +170,7 @@ function filter(p, xs) {
  
  foldr (:) [8] [1,2] = foldr (:) [1,8] [2]
                      = foldr (:) [2,1,8] []
-		     = [2,1,8] ??????????
+                     = [2,1,8] ??????????
  foldr (:) [8] [1,2] = ??????? second way
 
  foldl :: (b -> a -> b) -> b -> [a] -> b
@@ -183,7 +183,7 @@ function foldr(f, b, xs) {
     // foldr (+) 0 [1,2,3,4,5] =>
     //   ((((0+1)+2)+3)+4)+5
     if ( xs.length === 0 ) {
-	return b;
+        return b;
     }
     return foldr(f, f(xs[0], b), xs.slice(1));
     // would be better to do this w/o recursion
@@ -194,7 +194,7 @@ function foldl(f, b, xs) {
     // foldl (+) 0 [1,2,3,4,5] => 
     //   0+(1+(2+(3+(4+5))))
     if ( xs.length === 0 ) {
-	return b;
+        return b;
     }
     return f(foldl(f, b, xs.slice(1)), xs[0]);
 }
@@ -216,7 +216,7 @@ function range(low, high, step) {
         i = low;
     if ( step <= 0 ) {error('invalid step size -- must be positive');}
     for ( ; i < high; i += step ) {
-	arr.push(i);
+        arr.push(i);
     }
     return arr;
 }
