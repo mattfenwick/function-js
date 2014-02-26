@@ -1,7 +1,7 @@
 'use strict';
 
 
-function Node(value, next) {
+function Node(next, value) {
     return {'next': next, 'value': value};
 }
 
@@ -24,7 +24,8 @@ function remove(node, value) {
 
 function push(node, value) {
     if ( node.next === undefined ) {
-        node.next = Node(value, undefined); return node;
+        node.next = Node(undefined, value);
+        return node;
     }
     node.next = push(node.next, value);
     return node;
@@ -43,17 +44,26 @@ function shift(node) {
     return node.next;
 }
 
-// add to front
-function unshift(node, value) {
-    return Node(node, value);
-}
-
-
 function toString(node) {
     return JSON.stringify(elems(node));
 }
 
+function build(elems) {
+    var list = undefined;
+    for ( var i = elems.length - 1; i >= 0; i-- ) {
+        list = Node(list, elems[i]);
+    }
+    return list;
+}
 
 module.exports = {
-  ... missing some stuff here ...
+    'Node'    : Node    ,
+    'shift'   : shift   ,
+    'push'    : push    ,
+    'length'  : length  ,
+    'remove'  : remove  ,
+    'toString': toString,
+    'elems'   : elems   ,
+    'build'   : build
 };
+
