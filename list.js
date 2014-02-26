@@ -41,6 +41,17 @@ List.prototype.remove = function(x) {
     }
 };
 
+List.prototype.has = function(elem) {
+    var curr = this._front;
+    while ( curr !== undefined ) {
+        if ( curr.value === elem ) {
+            return true;
+        }
+        curr = curr.next;
+    }
+    return false;
+}
+
 List.prototype.length = function() {
     return this._length;
 };

@@ -44,6 +44,12 @@ function shift(node) {
     return node.next;
 }
 
+function has(node, elem) {
+    if ( node === undefined ) {return false;}
+    if ( node.value === elem ) {return true;}
+    return has(node.next, elem);
+}
+
 function toString(node) {
     return JSON.stringify(elems(node));
 }
@@ -64,6 +70,7 @@ module.exports = {
     'remove'  : remove  ,
     'toString': toString,
     'elems'   : elems   ,
+    'has'     : has     ,
     'build'   : build
 };
 
