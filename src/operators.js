@@ -10,7 +10,6 @@ module.exports = {
     '/'  : function(x, y) {return x / y;},
     'in' : function(obj, prop) {return prop in obj;},
     '.'  : function(obj, prop) {return obj[prop];},    // works for both `obj.prop` and `obj['some string']`
-    'hasOwn': function(obj, prop) {return obj.hasOwnProperty(prop);},
     'delete': function(obj, prop) {
         // TODO: could return some indicator of whether this worked
         // TODO: also could check to make sure the delete is allowed
@@ -27,7 +26,6 @@ module.exports = {
     '^'  : function(x, y) {return x  ^  y;},
     '>>' : function(x, y) {return x >>  y;},
     '>>>': function(x, y) {return x >>> y;},
-    '~'  : function(x) {return ~x;},
     '==' : function(x, y) {return x  == y;},
     '!=' : function(x, y) {return x  != y;},
     '===': function(x, y) {return x === y;},
@@ -55,6 +53,7 @@ module.exports = {
         return new Constructor(); // um, I actually don't know how to pass args
     },
     '!': function(x) {return !x;},
+    '~'  : function(x) {return ~x;},
 
     'p+': function(x) {return +x;}, // how to differentiate from infix +/-??
     'p-': function(x) {return -x;},
