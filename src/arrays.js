@@ -80,6 +80,34 @@ function filter(p, xs) {
     return arr;
 }
 
+function any() {
+    // `any` and `all` should be rewritten as folds
+    for (var i = 0; i < arguments.length; i++) {
+        if ( arguments[i] == true ) { // kind of odd, but I don't want non-booleans to be considered as truthy
+            return arguments[i];
+        } else if ( arguments[i] == false ) { // also odd
+            // nothing to do
+        } else {
+            throw new Error('type error -- expected boolean');
+        }
+    }
+    return false;
+}
+
+function all() {
+    for (var i = 0; i < arguments.length; i++) {
+        if ( arguments[i] == true ) { // odd.  see `any`
+            // nothing to do
+        } else if ( arguments[i] == false ) { // odd
+            return arguments[i];
+        } else {
+            throw new Error('type error -- expected boolean');
+        }
+    }
+    return true;
+}
+
+
 module.exports = {
     'getArgs' :  getArgs,
     'reverse' :  reverse,
@@ -92,5 +120,7 @@ module.exports = {
     'sortWith':  sortWith,
     'map'     :  map,
     'filter'  :  filter,
+    'any'     :  any,
+    'all'     :  all
 };
 
