@@ -12,30 +12,10 @@ function error(e) {
     throw new Error(e);
 }
 
-function type(obj) {
-    // types:
-    //  number, string, date, function,
-    //  object, array, boolean, regexp
-    //  arguments, null, undefined
-    // but wait: there's overlap.  so what's the canonical type?
-    if ( Object.prototype.toString.call(obj) === '[object Array]' ) {
-        return 'array';
-    }
-    return (typeof t);
-}
-    
-
-// operators
 // lists
-
-
-// application
-
 // `this`
 // exceptions
 // control structures
-
-// fun functions
 
 
 /*
