@@ -8,16 +8,16 @@ function type(val) {
     // tries to find subtype for objects
     if ( val === undefined ) {
         return {'type': 'undefined', 'prototypes': [],
-                'subtype': undefined, 'isPrimitive': true};
+                'subtype': null, 'isPrimitive': true};
     } else if ( val === null ) {
         return {'type': 'null', 'prototypes': [],
-                'subtype': undefined, 'isPrimitive': true};
+                'subtype': null, 'isPrimitive': true};
     }
     var ps = objects.prototypes(val);
     return {
         'type': 'object', 
         'prototypes': ps, 
-        'subtype': ps[0].constructor.name,
+        'subtype': (ps.length > 0) ? ps[0].constructor.name : null,
         'isPrimitive': !(val instanceof Object)
     };
 }
