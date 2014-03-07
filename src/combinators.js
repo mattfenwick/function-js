@@ -27,16 +27,6 @@ function on(f, g, x, y) {
 //    return f(appN(dupe(g), [x, y]));
 }
 
-function zip(xs, ys) {
-    // this could be generalized to any number of arrays
-    var end = (xs.length < ys.length) ? xs.length : ys.length;
-    var out = [];
-    for (var i = 0; i < end; i++) {
-        out.push([xs[i], ys[i]);
-    }
-    return out;
-}
-
 function appN(fs, xs) {
     // [a -> b] -> [a] -> [b]
     // I think this is similar to the ZipList applicative instance

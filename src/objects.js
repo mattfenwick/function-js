@@ -1,33 +1,33 @@
 'use strict';
 
 
-function ownNames(obj) {
-    return Object.getOwnPropertyNames(obj);
+function fromArray(pairs) {
+    // [(String, a)] -> Error e (Map String a)
+    var obj = {};
+    pairs.map(function(p) {
+        var key = p[0],
+            val = p[1];
+        if ( obj.hasOwnProperty(key) ) {
+            throw new Error('duplicate key: ' + key);
+        }
+        obj[key] = val;
+    });
+    return obj;
 }
 
-function is(obj, possible_prototype) {
-    return possible_prototype.isPrototypeOf(obj);
+function toArray(obj) {
+    // question: include key/val pairs on prototypes as well?
+    throw new Error('oops');
 }
 
-function parents(obj) {
-    var ps = [],
-        parent = new Object(obj); // takes care of primitives
-    while ( parent !== null ) { // seems to eventually get to null
-        ps.push(parent);
-        parent = Object.getPrototypeOf(parent);
-    }
-    return ps;
+function squash(obj) {
+    // create new object which includes properties from entire prototype chain
+    // question:  *all* of them?
+    throw new Error('oops');
 }
 
-function prototypes(obj) {
-    // same as `parents`, but doesn't include `obj`
-    return parents(obj).slice(1);
-}
 
 module.exports = {
-    'ownNames'  : ownNames   ,
-    'is'        : is         ,
-    'prototypes': prototypes ,
-    'parents'   : parents
+    'fromArray': fromArray,
+    'toArray': toArray
 };
-
