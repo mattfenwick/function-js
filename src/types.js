@@ -3,37 +3,47 @@
 var objects = require('./objects.js');
 
 
-function type(val) {
-    // does an end-around on primitives by converting them to objects
-    // tries to find subtype for objects
-    if ( val === undefined ) {
-        return {'type': 'undefined', 'prototypes': [],
-                'subtype': null, 'isPrimitive': true};
-    } else if ( val === null ) {
-        return {'type': 'null', 'prototypes': [],
-                'subtype': null, 'isPrimitive': true};
+function isProto(obj, possible_prototype) {
+    return possible_prototype.isPrototypeOf(obj);
+}
+
+function getPrototypes(obj) {
+    var protos = [],
+        parent;
+    while ( true ) { // seems to eventually get to null
+        parent = Object.getPrototypeOf(parent);
+        if ( parent === null ) {
+            break;
+        }
+        protos.push(parent);
     }
-    var ps = objects.prototypes(val);
+    return protos;
+}
+
+function getTypeData(val) {
+    if ( val instanceof Object ) {
+        var protos = getPrototypes(val);
+        return {
+            'type'       : 'object', // that's right -- even for functions
+            'prototypes' : protos,
+            'subtype'    : (protos.length > 0) ? protos[0].constructor.name : null,
+            'isPrimitive': false,
+            'toString'   : Object.prototype.toString.call(val)
+        };
+    }
+    // else: it's a primitive
     return {
-        'type': 'object', 
-        'prototypes': ps, 
-        'subtype': (ps.length > 0) ? ps[0].constructor.name : null,
-        'isPrimitive': !(val instanceof Object)
+        'type'       : ( val === null ) ? "null" : typeof val,
+        'prototypes' : null,
+        'subtype'    : null,
+        'isPrimitive': true,
+        'toString'   : Object.prototype.toString.call(val)
     };
-}
-
-function isArray(val) {
-    return val instanceof Array;
-}
-
-function isArguments(val) {
-    return Object.prototype.toString.call(obj) === '[object Arguments]';
 }
 
 
 module.exports = {
-    'type':  type,
-    'isArray': isArray,
-    'isArguments': isArguments
+    'getTypeData':  getTypeData,
+    'getPrototypes': getPrototypes,
+    'isProto': isProto
 };
-
