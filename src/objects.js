@@ -1,6 +1,9 @@
 'use strict';
 
 
+// error conditions: repeated key
+// q: what to do if dupe key?
+// a: (for now) throw error
 function fromArray(pairs) {
     // [(String, a)] -> Error e (Map String a)
     var obj = {};
@@ -16,14 +19,22 @@ function fromArray(pairs) {
 }
 
 function toArray(obj) {
-    // question: include key/val pairs on prototypes as well?
+    // q: include all key/val, or just own?
+    // a: maybe let `squash` worry about all?  so just do own here
     throw new Error('oops');
 }
 
 function squash(obj) {
     // create new object which includes properties from entire prototype chain
-    // question:  *all* of them?
+    // q:  *all* of them? including non-enumerable, overridden, etc.
+    // a: yes, *all*
+    // maybe return value is {'key': [...list of values...]}
     throw new Error('oops');
+}
+
+function fmap(f, obj) {
+    // q: all values, or just own values?
+    // a: just own values -- don't want to worry about prototype chain
 }
 
 
