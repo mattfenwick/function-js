@@ -69,34 +69,7 @@ function filter(p, xs) {
     return arr;
 }
 
-function any() {
-    // `any` and `all` should be rewritten as folds
-    for (var i = 0; i < arguments.length; i++) {
-        if ( arguments[i] == true ) { // kind of odd, but I don't want non-booleans to be considered as truthy
-            return arguments[i];
-        } else if ( arguments[i] == false ) { // also odd
-            // nothing to do
-        } else {
-            throw new Error('type error -- expected boolean');
-        }
-    }
-    return false;
-}
-
-function all() {
-    for (var i = 0; i < arguments.length; i++) {
-        if ( arguments[i] == true ) { // odd.  see `any`
-            // nothing to do
-        } else if ( arguments[i] == false ) { // odd
-            return arguments[i];
-        } else {
-            throw new Error('type error -- expected boolean');
-        }
-    }
-    return true;
-}
-
-function concat(xs, ys) {
+function concat(xs, ys) { // want to efficiently generalize to many arrays ...
     // [a] -> [a] -> [a]
     // what about strings?
     var arr = xs.slice(), // makes a copy
@@ -106,6 +79,58 @@ function concat(xs, ys) {
     }
     return arr;
 }
+
+// folds
+
+function foldr(f, base, xs) {
+    // (a -> b -> b) -> b -> [a] -> b
+    // foldr (+) 0 [1,2,3,4,5] =>
+    //   (1+(2+(3+0)))
+    for ( var i = xs.length - 1; i >= 0; i-- ) {
+        base = f(xs[i], base);
+    }
+    return base;
+}
+
+function foldl(f, base, xs) {
+    // (b -> a -> b) -> b -> [a] -> b
+    // foldl (+) 0 [1,2,3] => 
+    //   (((0+1)+2)+3)
+    for ( var i = 0; i < xs.length; i++ ) {
+        base = f(base, xs[i]);
+    }
+    return base;
+}
+
+function any(args) {
+    function f(base, y) { // operator or
+        return base || y;
+    }
+    return foldl(f, false, args);
+}
+
+function all(args) {
+    function f(x, base) { // operator and
+        return x && base;
+    }
+    return foldl(f, true, args);
+}
+
+function sum(args) {
+    function f(x, base) {
+        return x + base;
+    }
+    return foldl(f, 0, args);
+}
+
+function product(args) {
+    function f(x, base) {
+        return x * base;
+    }
+    return foldl(f, 1, args);
+}
+
+// other stuff
 
 function zip(xs, ys) {
     // this could be generalized to any number of arrays
@@ -117,27 +142,6 @@ function zip(xs, ys) {
     return out;
 }
 
-function foldr(f, b, xs) {
-    // (a -> b -> b) -> b -> [a] -> b
-    // foldr (+) 0 [1,2,3,4,5] =>
-    //   (1+(2+(3+0)))
-    if ( xs.length === 0 ) {
-        return b;
-    }
-    return foldr(f, f(xs[0], b), xs.slice(1));
-    // would be better to do this w/o recursion
-}
-
-function foldl(f, b, xs) {
-    // (b -> a -> b) -> b -> [a] -> b
-    // foldl (+) 0 [1,2,3] => 
-    //   (((0+1)+2)+3)
-    if ( xs.length === 0 ) {
-        return b;
-    }
-    return f(foldl(f, b, xs.slice(1)), xs[0]);
-}
-
 function group() {
     throw new Error('oops');
 }
@@ -146,7 +150,6 @@ function group() {
 module.exports = {
     'getArgs' :  getArgs,
     'reverse' :  reverse,
-    'concat'  :  concat,
     'array'   :  array,
     'range'   :  range,
     'curry'   :  curry,
@@ -155,10 +158,13 @@ module.exports = {
     'sortWith':  sortWith,
     'map'     :  map,
     'filter'  :  filter,
-    'any'     :  any,
-    'all'     :  all,
-    'zip'     :  zip,
+    'concat'  :  concat,
     'foldr'   :  foldr,
     'foldl'   :  foldl,
+    'any'     :  any,
+    'all'     :  all,
+    'sum'     :  sum,
+    'product' :  product,
+    'zip'     :  zip,
     'group'   :  group
 };

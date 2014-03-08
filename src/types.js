@@ -1,7 +1,5 @@
 'use strict';
 
-var objects = require('./objects.js');
-
 
 function isProto(obj, possible_prototype) {
     return possible_prototype.isPrototypeOf(obj);
@@ -43,7 +41,7 @@ function getTypeData(val) {
 
 
 module.exports = {
-    'getTypeData':  getTypeData,
+    'getTypeData'  :  getTypeData,
     'getPrototypes': getPrototypes,
-    'isProto': isProto
+    'isProto'      : isProto
 };
