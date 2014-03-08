@@ -1,0 +1,6 @@
+arrays:
+ - remove `range`, replace with some more general `unfoldr`
+ - put `reverse` in the folds area
+ - move `curry` and `uncurry` to functions module
+ - generalize concat and zip
+ - 

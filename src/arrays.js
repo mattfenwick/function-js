@@ -102,6 +102,7 @@ function foldl(f, base, xs) {
     return base;
 }
 
+// any, all, and product *could* short-circuit (on truthy, falsy, 0)
 var any     = funcs.partial(foldl, ops['||'], false),
     all     = funcs.partial(foldl, ops['&&'], true),
     sum     = funcs.partial(foldl, ops['+'] , 0),
