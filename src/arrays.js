@@ -14,17 +14,6 @@ function reverse(xs) {
     return arr;
 }
 
-function concat(xs, ys) {
-    // [a] -> [a] -> [a]
-    // what about strings?
-    var arr = xs.slice(), // makes a copy
-        i = 0;
-    for ( ; i < ys.length; i++) {
-        arr.push(ys[i]);
-    }
-    return arr;
-}
-
 function array() {
     return getArgs(arguments);
 }
@@ -107,6 +96,17 @@ function all() {
     return true;
 }
 
+function concat(xs, ys) {
+    // [a] -> [a] -> [a]
+    // what about strings?
+    var arr = xs.slice(), // makes a copy
+        i = 0;
+    for ( ; i < ys.length; i++) {
+        arr.push(ys[i]);
+    }
+    return arr;
+}
+
 function zip(xs, ys) {
     // this could be generalized to any number of arrays
     var end = (xs.length < ys.length) ? xs.length : ys.length;
@@ -117,28 +117,10 @@ function zip(xs, ys) {
     return out;
 }
 
-/*
- there's no way both `foldr` and `foldl` are right ... is there?
- gotta check.  haskell:
- foldr :: (a -> b -> b) -> b -> [a] -> b
- foldr f b [] = b
- foldr f b (x:xs) = foldr f (f x b) xs
- foldr f b (x:xs) = f x (foldr f b xs) -- <-- is it this one?
- 
- foldr (:) [8] [1,2] = foldr (:) [1,8] [2]
-                     = foldr (:) [2,1,8] []
-                     = [2,1,8] ??????????
- foldr (:) [8] [1,2] = ??????? second way
-
- foldl :: (b -> a -> b) -> b -> [a] -> b
- foldl f b [] = b
- foldl f b (x:xs) = foldl f (f b x) xs
- foldl f b (x:xs) = f (foldl f b xs) x -- <-- is it this one?
-*/
 function foldr(f, b, xs) {
     // (a -> b -> b) -> b -> [a] -> b
     // foldr (+) 0 [1,2,3,4,5] =>
-    //   ((((0+1)+2)+3)+4)+5
+    //   (1+(2+(3+0)))
     if ( xs.length === 0 ) {
         return b;
     }
@@ -148,8 +130,8 @@ function foldr(f, b, xs) {
 
 function foldl(f, b, xs) {
     // (b -> a -> b) -> b -> [a] -> b
-    // foldl (+) 0 [1,2,3,4,5] => 
-    //   0+(1+(2+(3+(4+5))))
+    // foldl (+) 0 [1,2,3] => 
+    //   (((0+1)+2)+3)
     if ( xs.length === 0 ) {
         return b;
     }
