@@ -52,16 +52,16 @@ module.exports = {
         var args = getArgs(arguments).slice(1);
         return new Constructor(); // um, I actually don't know how to pass args
     },
-    '!': function(x) {return !x;},
+    '!'  : function(x) {return !x;},
     '~'  : function(x) {return ~x;},
 
-    'p+': function(x) {return +x;}, // how to differentiate from infix +/-??
-    'p-': function(x) {return -x;},
+    'p+' : function(x) {return +x;}, // how to differentiate from infix +/-??
+    'p-' : function(x) {return -x;},
 
     // postfix
 
     //ternary
-    '?:': function(condition, iftrue, iffalse) {
+    '?:' : function(condition, iftrue, iffalse) {
         // does not exactly match `a ? b : c` semantics because
         //   of eager evaluation of function arguments
         return (condition ? iftrue : iffalse);

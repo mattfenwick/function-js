@@ -1,8 +1,8 @@
 'use strict';
 
-function getArgs(args) {
-    return Array.prototype.slice.call(args);
-}
+var ops = require('./operators.js'),
+    funcs = require('./functions.js');
+
 
 function reverse(xs) {
     // what about strings?
@@ -15,7 +15,7 @@ function reverse(xs) {
 }
 
 function array() {
-    return getArgs(arguments);
+    return ops.getArgs(arguments);
 }
 
 function range(low, high, step) {
@@ -102,33 +102,10 @@ function foldl(f, base, xs) {
     return base;
 }
 
-function any(args) {
-    function f(base, y) { // operator or
-        return base || y;
-    }
-    return foldl(f, false, args);
-}
-
-function all(args) {
-    function f(x, base) { // operator and
-        return x && base;
-    }
-    return foldl(f, true, args);
-}
-
-function sum(args) {
-    function f(x, base) {
-        return x + base;
-    }
-    return foldl(f, 0, args);
-}
-
-function product(args) {
-    function f(x, base) {
-        return x * base;
-    }
-    return foldl(f, 1, args);
-}
+var any     = funcs.partial(foldl, ops['||'], false),
+    all     = funcs.partial(foldl, ops['&&'], true),
+    sum     = funcs.partial(foldl, ops['+'] , 0),
+    product = funcs.partial(foldl, ops['*'] , 1);
 
 // other stuff
 
@@ -137,7 +114,7 @@ function zip(xs, ys) {
     var end = (xs.length < ys.length) ? xs.length : ys.length;
     var out = [];
     for (var i = 0; i < end; i++) {
-        out.push([xs[i], ys[i]);
+        out.push([xs[i], ys[i]]);
     }
     return out;
 }
@@ -148,7 +125,6 @@ function group() {
 
 
 module.exports = {
-    'getArgs' :  getArgs,
     'reverse' :  reverse,
     'array'   :  array,
     'range'   :  range,
