@@ -18,17 +18,6 @@ function array() {
     return ops.getArgs(arguments);
 }
 
-function range(low, high, step) {
-    // Num -> Num -> Num -> [Num]
-    var arr = [],
-        i = low;
-    if ( step <= 0 ) {error('invalid step size -- must be positive');}
-    for ( ; i < high; i += step ) {
-        arr.push(i);
-    }
-    return arr;
-}
-
 function curry(f, x, y) {
     // ((a, b) -> c) -> a -> b -> c
     return f([x, y]);
@@ -120,28 +109,69 @@ function zip(xs, ys) {
     return out;
 }
 
+function unfoldr(f_next, seed) {
+    // (b -> Maybe (a, b)) -> b -> [a]
+    var out = [],
+        next;
+    while ( true ) {
+        next = f_next(seed);
+        if ( next === undefined ) {break;}
+        out.push(next[0]);
+        seed = next[1];
+    }
+    return out;
+}
+
+function range(low, high, step) {
+    if ( step <= 0 ) {throw new Error('invalid step size -- must be positive');}
+    function f_next(seed) {
+        if ( seed >= high ) {return undefined;}
+        return [seed, seed + step];
+    }
+    return unfoldr(f_next, low);
+}
+
+function factorials(n) {
+    function f_next(base, next) {
+        base.push(next * base[base.length - 1]);
+        return base;
+    }
+    return foldl(f_next, [1], a.range(1, n + 1, 1));
+}
+
+function fib(n) {
+    function f_next(seed) {
+        if ( seed[0] > n ) {return undefined;}
+        return [seed[2], [seed[0] + 1, seed[2], seed[1] + seed[2]]];
+    }
+    return unfoldr(f_next, [1, 0, 1]);
+}
+
 function group() {
-    throw new Error('oops');
+    throw new Error('oops -- undefined');
 }
 
 
 module.exports = {
-    'reverse' :  reverse,
-    'array'   :  array,
-    'range'   :  range,
-    'curry'   :  curry,
-    'uncurry' :  uncurry,
-    'sortBy'  :  sortBy,
+    'reverse' :  reverse ,
+    'array'   :  array   ,
+    'curry'   :  curry   ,
+    'uncurry' :  uncurry ,
+    'sortBy'  :  sortBy  ,
     'sortWith':  sortWith,
-    'map'     :  map,
-    'filter'  :  filter,
-    'concat'  :  concat,
-    'foldr'   :  foldr,
-    'foldl'   :  foldl,
-    'any'     :  any,
-    'all'     :  all,
-    'sum'     :  sum,
-    'product' :  product,
-    'zip'     :  zip,
+    'map'     :  map     ,
+    'filter'  :  filter  ,
+    'concat'  :  concat  ,
+    'foldr'   :  foldr   ,
+    'foldl'   :  foldl   ,
+    'any'     :  any     ,
+    'all'     :  all     ,
+    'sum'     :  sum     ,
+    'product' :  product ,
+    'zip'     :  zip     ,
+    'unfoldr' :  unfoldr ,
+    'range'   :  range   ,
+    'factorials': factorials,
+    'fib'     :  fib     ,
     'group'   :  group
 };
