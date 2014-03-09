@@ -28,6 +28,16 @@ function partial(f) {
 
 // some combinators
 
+function curry(f, x, y) {
+    // ((a, b) -> c) -> a -> b -> c
+    return f([x, y]);
+}
+
+function uncurry(f, pair) {
+    // (a -> b -> c) -> (a, b) -> c
+    return f(pair[0], pair[1]);
+}
+
 function id(x) {
     return x;
 }
@@ -37,12 +47,6 @@ function id(x) {
     return x;
 }*/
 
-function flip(f) {
-    // (a -> ... -> y -> z) -> a -> ... -> y -> z
-    var args = getArgs(arguments).slice(1);
-    return apply_(f, reverse(args));
-}
-
 function compose(f, g, x) {
     // (a -> b) -> (b -> c) -> a -> c
     return f(g(x));
@@ -51,14 +55,6 @@ function compose(f, g, x) {
 function on(f, g, x, y) {
     // (b -> b -> c) -> (a -> b) -> a -> a -> c
     return f(g(x), g(y));
-//    return f(appN(dupe(g), [x, y]));
-}
-
-function appN(fs, xs) {
-    // [a -> b] -> [a] -> [b]
-    // I think this is similar to the ZipList applicative instance
-    // (a -> b, c -> d, ...) -> (a, c, ...) -> (b, d, ...)
-    return map(uncurry(call_), zip(fs, xs));
 }
 
 function dupe(x) {
@@ -69,21 +65,21 @@ function dupe(x) {
 function split(f, g, x) {
     // (a -> b) -> (a -> c) -> a -> (b, c)
     return [f(x), g(x)];
-//    return app2([f, g], dupe(x));
 }
 
 
 module.exports = {
     'getArgs' : getArgs ,
+
     'apply_'  : apply_  ,
     'call_'   : call_   ,
     'partial' : partial ,
 
+    'curry'   :  curry  ,
+    'uncurry' :  uncurry,
     'id'      : id      ,
-    'flip'    : flip    ,
     'compose' : compose ,
     'on'      : on      ,
-    'appN'    : appN    ,
     'dupe'    : dupe    ,
     'split'   : split
 };
