@@ -7,7 +7,7 @@ function isProto(obj, possible_prototype) {
 
 function getPrototypes(obj) {
     var protos = [],
-        parent;
+        parent = obj;
     while ( true ) { // seems to eventually get to null
         parent = Object.getPrototypeOf(parent);
         if ( parent === null ) {
