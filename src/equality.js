@@ -1,15 +1,13 @@
 'use strict';
 
 
+var canEqual = {'undefined': 1, 'string': 1, 'boolean': 1, 'function': 1};
+
 function eq(a, b) {
-    var t_a = typeof a;
     if ( typeof a !== typeof b ) { return false; }
-    if ( a === undefined ) { return (b === undefined); }
-    if ( a === null ) { return (b === null); }
-    if ( ( t_a === 'string' ) || ( t_a === 'boolean' ) ) {
+    if ( ( a === null ) || ( canEqual.hasOwnProperty(typeof a) ) {
         return ( a === b );
     }
-    if ( t_a === 'function' ) { return (a === b); }
     if ( t_a === 'number' ) {
         if ( Number.isNaN(a) ) { return Number.isNaN(b); }
         return ( a === b );
@@ -22,9 +20,22 @@ function eq(a, b) {
          ( a instanceof String  ) {
         return eq(a.valueOf(), b.valueOf());
     }
-    // RegExp
-    // Date
+    // not sure how to deal with subclasses
+    if ( Object.getPrototype(a) === Date.prototype ) {
+        return a.valueOf() === b.valueOf();
+    }
+    if ( Object.getPrototype(a) === RegExp.prototype ) {
+        return ( a.source === b.source && a.global === b.global &&
+                 a.multiline === b.multiline && a.ignoreCase === b.ignoreCase );
+    }
     // Array
+    if ( Object.getPrototype(a) === Array.prototype ) {
+        if ( a.length !== b.length ) { return false; }
+        for (var i = 0; i < a.length; i++) {
+            if ( !eq(a[i], b[i]) ) { return false; } // what about cyclic references?
+        }
+        return true;
+    }
     // window, xml, html ???
     // prototypes ??
     // ... other objects ...
