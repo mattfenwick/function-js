@@ -1,0 +1,24 @@
+{
+  "name": "function-js",
+  "version": "0.0.1",
+  "description": "functions FTW!",
+  "main": "index.js",
+  "scripts": {
+    "test": "i don't know!  TODO: fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mattfenwick/function-js"
+  },
+  "keywords": [
+    "functions",
+    "functional",
+    "programming"
+  ],
+  "author": "Matt Fenwick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattfenwick/function-js/issues"
+  },
+  "homepage": "https://github.com/mattfenwick/function-js"
+}
