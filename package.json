@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/mattfenwick/function-js/issues"
   },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "0.4.4",
+    "grunt-cli": "0.1.13",
+    "grunt-contrib-jshint": "0.9.2"
+  },
   "homepage": "https://github.com/mattfenwick/function-js"
 }
