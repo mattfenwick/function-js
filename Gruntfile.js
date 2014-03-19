@@ -12,7 +12,7 @@ var options = {
     "forin"         : true,     // Tolerate `for in` loops without `hasOwnPrototype`.
     // "freeze": false,
     "immed"         : true,     // Require immediate invocations to be wrapped in parens e.g. `( function(){}() );`
-    // "indent": 4,
+    "indent": 4,
     "latedef"       : true,     // Prohibit variable use before definition.
     "newcap"        : true,     // Require capitalization of all constructor functions e.g. `new F()`.
     "noarg"         : true,     // Prohibit use of `arguments.caller` and `arguments.callee`.
@@ -31,30 +31,30 @@ var options = {
     // "maxstatements": 1,
     // "maxcomplexity": 1,
     // "maxlen": 1,
-    // "indent"        : 4,
+
     "maxerr"        : 10000     // Annoying when jshint stops partway through a file ... is 10K high enough?
 };
 
 
 module.exports = function(grunt) {
 
-  grunt.initConfig({
+    grunt.initConfig({
 
-    "jshint": {
-      "gruntfile": {
-        "options": options,
-        "src": 'Gruntfile.js'
-      },
-      "lib": {
-        "options": options,
-        "src": ['lib/*.js']
-      }
-    }
-  });
+        "jshint": {
+            "gruntfile": {
+                "options": options,
+                "src": 'Gruntfile.js'
+            },
+            "lib": {
+                "options": options,
+                "src": ['lib/*.js']
+            }
+        }
+    });
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('default', ['jshint']);
 
 };
 
